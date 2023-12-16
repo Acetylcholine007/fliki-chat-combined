@@ -1,0 +1,31 @@
+version: "3"
+services:
+  api:
+    build:
+      context: ./be
+      dockerfile: ./Dockerfile
+    restart: always
+    volumes:
+      - /usr/src/app/node_modules
+    ports:
+      - "4000:4000"
+    env_file: ./be/.env
+    networks:
+      - fliki-chat-net
+  web:
+    build:
+      context: ./fe
+      dockerfile: ./Dockerfile
+    restart: always
+    volumes:
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    env_file: ./fe/.env
+    depends_on:
+      - api
+    networks:
+      - fliki-chat-net
+networks:
+  fliki-chat-net:
+    driver: bridge
